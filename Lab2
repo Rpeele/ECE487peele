@@ -1,0 +1,243 @@
+
+
+/* Robby Peele                                          */
+/* 11409684                                             */
+/* Laboratory 2 - Introduction to Digital Input/Output  */
+
+
+   
+int inputPin = 11;     /* setting up input and output pins */ 
+int outputPin = 12;
+
+unsigned long previousMillis = 0;    /* setting variable at 0 to compare */
+#define A 2                           /* pin allocations for seven-segment display */ 
+#define B 3
+#define C 4
+#define D 5                           /* pin allocations for seven-segment display */
+#define E 6
+#define F 8
+#define G 9                         /* pin allocations for seven-segment display */
+
+
+/* setting up state change variables */
+int switchCounter = 0;    /* counts number of switch changes */ 
+int switchState = 0;      /* current state of the switch */
+int lastswitchState = 0;  /* last state of the switch   */
+String hexCounter;             /* hex form of counter */
+
+
+// the setup function runs once when you press reset or power the board
+void setup() {
+                            
+  pinMode(A, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(B, OUTPUT);
+  pinMode(C, OUTPUT);
+  pinMode(D, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(E, OUTPUT);
+  pinMode(F, OUTPUT);
+  pinMode(G, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(inputPin, INPUT);
+  pinMode(13, OUTPUT);      /* initialize digital pin 13 as an output */
+  pinMode(outputPin, OUTPUT);      /* set pin 12 as output LED on breadboard */
+  Serial.begin(9600);       /* initialize serial library at 9600 bps  */
+  Serial.println("Change the position of the Switch to start a count in form of (decimal)  (Hex), resetting at 15."); 
+  
+}
+
+// the loop function runs continuously 
+void loop() {
+  switchState = digitalRead(inputPin);  /* reading switch state */
+  if (switchState != lastswitchState){  /* comparing the last state, to make sure it changed */
+    switchCounter++;
+    if (switchCounter >= 16) {                    /* if count reaches 16, reset to 0 */ 
+      switchCounter = 0; }    
+    hexCounter = String(switchCounter, HEX);         /* converting to HEX   */
+    Serial.print("count = ");
+    Serial.print(switchCounter);
+    Serial.print("  ");
+    Serial.println(switchCounter, HEX);
+    DisplayCount();                             /* sending count to function to write to dispay  */
+    while (switchState == HIGH){ 
+        unsigned long currentMillis = millis();
+        digitalWrite(13, HIGH);       /* turn the LED on (HIGH is the voltage level) */
+        digitalWrite(12, LOW);        /* turn the LED off on breadboard              */
+        if(currentMillis - previousMillis >= 2000) {
+          digitalWrite(13, LOW);        /* turn the LED off by making the voltage LOW  */
+          digitalWrite(12, HIGH);       /* turn the LED on connected to output pin 12 (breadboard LED) */ 
+          previousMillis = millis(); }   /* remember the time */
+        delay(1000);
+        switchState = digitalRead(inputPin);
+        if (switchState == LOW) {                           /* if switchState is LOW, turn off LED's */              
+          switchCounter++;
+          if (switchCounter >= 16) {
+            switchCounter = 0; }    
+          hexCounter = String(switchCounter, HEX);
+          digitalWrite(13, LOW);       /* turn off LED on Mega       */
+          digitalWrite(12, LOW);       /* turn off LED on breadboard */
+          Serial.print("count = ");
+          Serial.print(switchCounter);
+          Serial.print("  ");
+          Serial.println(switchCounter, HEX);      /* prints count in hex form   */
+          DisplayCount();                         /* function that writes this count to the display */
+          
+          
+        }
+     }
+     
+  }
+  
+ 
+   lastswitchState = switchState;
+  
+  
+        }
+ void DisplayCount()  {           /* function to display the count to the 7-segment display */
+  switch(switchCounter){
+    case 0:                     /* writes 0 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break;
+     case 1:                  /* writes 2 to the display   */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      break;
+     case 2:                  /* writes 2 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, HIGH);
+      break;
+     case 3:                /* writes 3 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break; 
+     case 4:                /* writes 4 to the display   */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break;
+     case 5:                /* writes 5 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      break;
+     case 6:                /* writes 6 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      break;
+     case 7:                /* writes 7 to the display   */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break;
+     case 8:                /* writes 8 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break;
+     case 9:                /* writes 9 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break;
+     case 10:                 /* case for A  */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break;
+     case 11:                 /* case for B  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      break;
+     case 12:                 /* case for C  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      break;
+     case 13:               /* case for D  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, LOW);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      break;
+     case 14:               /* case for E  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      break;
+     case 15:               /* case for F  */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      break;
+     
+  }
+ }
+ 
