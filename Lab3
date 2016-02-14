@@ -1,0 +1,245 @@
+/* Robby Peele                                     */
+/* 11409684                                        */
+/* Laboratory 3 - Introduction to Watchdog Timers  */
+
+#define A 2                           /* pin allocations for seven-segment display */ 
+#define B 3
+#define C 4
+#define D 5                           /* pin allocations for seven-segment display */
+#define E 6
+#define F 8
+#define G 9                         /* pin allocations for seven-segment display */
+#define DP 10                        /* pin 10 allocated for decimal on display   */
+
+unsigned long previousMillis = 0;    /* setting variable at 0 to compare */
+int inputnumber = 0;
+int displaynumber;
+
+void setup() {
+
+  pinMode(A, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(B, OUTPUT);
+  pinMode(C, OUTPUT);
+  pinMode(D, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(E, OUTPUT);
+  pinMode(F, OUTPUT);
+  pinMode(G, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(DP, OUTPUT);
+  Serial.begin(9600);                                                      /* initialize serial library at 9600 bps  */
+  Serial.println("Waiting for integer input (in decimal) from user: ");    
+    
+
+}
+
+void loop() {
+  unsigned long currentMillis = millis();  /* set the current time */
+  if (currentMillis - previousMillis >= 3000){    /* if nothing is available in serial port and 3 seconds pass, reset arduino */
+    displaynumber = 16;                                                         /* setting the display case to print to display                             */
+    DisplayCount();                                                             /* sending reset signal (dot) to Display                                    */
+    previousMillis = currentMillis;                                             /* remember the time                                                        */  
+    Serial.println("No input detected for 3 seconds, resetting arduino...  ");
+  }
+  if(Serial.available() > 0) {            /* checks if there are any available bytes for reading in the serial port */
+    int inputnumber = Serial.parseInt();      /* read incoming integer number       */
+    if(inputnumber >= 16) {
+      displaynumber = 17;                  /* if input is greater or equal to 16, then */
+      DisplayCount();                     /* sending invalid input ( 3 horizontal lines) to Display  */
+      Serial.println(" Invalid Input ");
+      previousMillis = currentMillis;     /* remember the time */
+      }
+    if(inputnumber < 16) {
+      displaynumber = inputnumber;
+      DisplayCount();                     /* sending input to 7 Segment Display    */
+      Serial.print("Valid Data Received : ");     /* sending input data to Serial monitor  */
+      Serial.println(inputnumber);      
+      previousMillis = currentMillis;     /* remember the time */
+    }
+      
+  }
+
+}
+
+void DisplayCount()  {           /* function to display the count to the 7-segment display */
+  switch(displaynumber){
+    case 0:                     /* writes 0 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 1:                  /* writes 2 to the display   */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(DP, HIGH);
+      break;
+     case 2:                  /* writes 2 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, HIGH);
+      digitalWrite(DP, HIGH);
+      break;
+     case 3:                /* writes 3 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break; 
+     case 4:                /* writes 4 to the display   */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 5:                /* writes 5 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 6:                /* writes 6 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 7:                /* writes 7 to the display   */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 8:                /* writes 8 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 9:                /* writes 9 to the display   */
+      digitalWrite(D, LOW);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 10:                 /* case for A  */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 11:                 /* case for B  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 12:                 /* case for C  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(DP, HIGH);
+      break;
+     case 13:               /* case for D  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, LOW);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(DP, HIGH);
+      break;
+     case 14:               /* case for E  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(DP,HIGH);
+      break;
+     case 15:               /* case for F  */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, LOW);
+      digitalWrite(F, LOW);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(DP, HIGH);
+      break;  
+     case 16:               /* case for decimal point  */
+      digitalWrite(D, HIGH);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, HIGH);
+      digitalWrite(A, HIGH);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(DP, LOW);
+      break;
+     case 17:               /* case for invalid input --> 3 horizontal lines  */
+      digitalWrite(D, LOW);
+      digitalWrite(E, HIGH);
+      digitalWrite(F, HIGH);
+      digitalWrite(G, LOW);
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(DP, HIGH);
+      break;
+  }
+}
