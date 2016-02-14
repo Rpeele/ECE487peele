@@ -1,0 +1,41 @@
+/* Robby Peele                                          */
+/* 11409684                                             */
+/* Laboratory 1 - Introduction to the Arduino Platform  */
+   
+
+
+// the setup function runs once when you press reset or power the board
+void setup() {
+                            
+  pinMode(13, OUTPUT);      /* initialize digital pin 13 as an output */
+  pinMode(12, OUTPUT);      /* set pin 12 as output LED on breadboard */
+  Serial.begin(9600);       /* initialize serial library at 9600 bps  */
+  Serial.println("Waiting for user input...");
+}
+
+// the loop function runs continuously 
+void loop() {
+  if (Serial.available() > 0) {       /* fetch the number of characters available for reading in the serial buffer  */
+    int inputletter = Serial.read();  /* read incoming byte */                                        
+    while(inputletter == 'g'){        /* if g is pressed, start sequence             */
+        digitalWrite(13, HIGH);       /* turn the LED on (HIGH is the voltage level) */
+        digitalWrite(12, LOW);        /* turn the LED off on breadboard              */
+        delay(2000);                  /* wait for 2 seconds                          */
+        digitalWrite(13, LOW);        /* turn the LED off by making the voltage LOW  */
+        digitalWrite(12, HIGH);       /* turn the LED on connected to output pin 12 (breadboard LED) */ 
+        delay(1000);                  /* wait for a second */
+        
+        
+        if (Serial.available() > 0) {    /* fetch the number of characters available for reading in the serial buffer, makes sure data has been received  */                             
+          int newinput = Serial.read();  /* read incoming byte */                      
+          if(newinput == 's'){           /* if s is pressed, turn off LED sequence */  
+            Serial.println("Received s, turning off LED sequence");   
+            inputletter = 's';           /* setting intputletter = s so the sequence stays off */  
+            digitalWrite(13, LOW);       /* turn off LED on Mega       */
+            digitalWrite(12, LOW);       /* turn off LED on breadboard */
+            
+        }                     
+      }
+    }
+  }
+}
