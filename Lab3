@@ -14,19 +14,22 @@
 unsigned long previousMillis = 0;    /* setting variable at 0 to compare */
 int inputnumber = 0;
 int displaynumber;
+int resetPin = 12;                  /* reset pin connected to output pin 12 */
 
 void setup() {
-
-  pinMode(A, OUTPUT);       /* setting seven segment display as output  */
+  
+  digitalWrite(resetPin, HIGH);    /* reset pin enabled high so that the arduino doesn't automatically reset. (all pins are pulled low at power up) */ 
+  pinMode(A, OUTPUT);              /* setting seven segment display as output  */
   pinMode(B, OUTPUT);
   pinMode(C, OUTPUT);
-  pinMode(D, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(D, OUTPUT);             /* setting seven segment display as output  */
   pinMode(E, OUTPUT);
   pinMode(F, OUTPUT);
-  pinMode(G, OUTPUT);       /* setting seven segment display as output  */
+  pinMode(G, OUTPUT);             /* setting seven segment display as output  */
   pinMode(DP, OUTPUT);
-  Serial.begin(9600);                                                      /* initialize serial library at 9600 bps  */
-  Serial.println("Waiting for integer input (in decimal) from user: ");    
+  pinMode(resetPin, OUTPUT); 
+  Serial.begin(9600);             /* initialize serial library at 9600 bps  */
+  Serial.println("Waiting for integer input from 0-16 (in decimal) from user: ");    
     
 
 }
@@ -34,17 +37,18 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();  /* set the current time */
   if (currentMillis - previousMillis >= 3000){    /* if nothing is available in serial port and 3 seconds pass, reset arduino */
-    displaynumber = 16;                                                         /* setting the display case to print to display                             */
-    DisplayCount();                                                             /* sending reset signal (dot) to Display                                    */
-    previousMillis = currentMillis;                                             /* remember the time                                                        */  
     Serial.println("No input detected for 3 seconds, resetting arduino...  ");
+    displaynumber = 16;                                                         /* setting the display case to print to display                             */
+    previousMillis = currentMillis;                                             /* remember the time                                                        */  
+    digitalWrite(resetPin, LOW);                  /* resetting Arduino   */ 
+    DisplayCount();                                                             /* sending reset signal (dot) to Display                                    */
   }
-  if(Serial.available() > 0) {            /* checks if there are any available bytes for reading in the serial port */
+  if (Serial.available() > 0) {            /* checks if there are any available bytes for reading in the serial port */
     int inputnumber = Serial.parseInt();      /* read incoming integer number       */
     if(inputnumber >= 16) {
       displaynumber = 17;                  /* if input is greater or equal to 16, then */
       DisplayCount();                     /* sending invalid input ( 3 horizontal lines) to Display  */
-      Serial.println(" Invalid Input ");
+      Serial.println(" Invalid Input, type numbers between 1-15 only ");
       previousMillis = currentMillis;     /* remember the time */
       }
     if(inputnumber < 16) {
