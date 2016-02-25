@@ -1,10 +1,8 @@
-  /* Robby Peele                                                 */
+/* Robby Peele                                                 */
 /* 11409684                                                    */
 /* Laboratory 4 - Introduction to Analog-to-Digital Converters */
 
 int Analog_Pin = A0;                 /* Analog input pin for potentiometer */
-int counter;
-int conversion_value;
 unsigned long previousMicros=0;
 int ArrayVal[30];
 
@@ -32,12 +30,13 @@ void conversions(){
   int counter = 1;
   int Summation = 0;
   int a = 0;
+  int conversion_value;
   while(a<30){
     unsigned long currentMicros = micros();         /* set the current time */  
     conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
     previousMicros = micros();                      /* get current time        */ 
     int conversionTime;
-    conversionTime = previousMicros - currentMicros;
+    conversionTime = previousMicros - currentMicros;   /* getting conversion time */
     ArrayVal[a] = conversionTime;
     Serial.print("#");
     Serial.print(counter);
@@ -46,18 +45,17 @@ void conversions(){
     Serial.print("\t Time = ");
     Serial.println(conversionTime);
     delay(500);                                     /* waits 0.5 seconds until next conversion starts */
-    counter++;
-    a++;
+    counter++;                          /* incremenet counter */
+    a++;                                /* increment a */
   }
   int x = 0;
   while(x<30){
-    Summation += ArrayVal[x];
+    Summation += ArrayVal[x];           /* summing values */
     x++;
   }
   int average_time;
-  average_time = Summation/30; 
+  average_time = Summation/30;                /* getting average value of conversion times */
   Serial.print("avg conversion time = ");
   Serial.print(average_time);
   Serial.println("usecs");
 }  
-
