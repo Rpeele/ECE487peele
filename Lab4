@@ -1,0 +1,366 @@
+
+/* Robby Peele                                                 */
+/* 11409684                                                    */
+/* Laboratory 4 - Introduction to Analog-to-Digital Converters */
+
+int Analog_Pin = A0;                 /* Analog input pin for potentiometer */
+int average_conversion_time;
+int conversion_value;
+unsigned long previousMicros=0;
+
+
+
+void setup() {
+
+  Serial.begin(9600);       /* initialize serial library at 9600 bps  */
+  Serial.println("Enter the letter 'c' to begin a set of 30 analog-to-digital conversions");
+}
+
+void loop() {
+  if(Serial.available() > 0) {             /* fetch the number of characters available for reading in the serial buffer  */
+    int inputletter = Serial.read();       /* read incoming byte */ 
+    if(inputletter == 'c') {
+      Serial.println("Starting a set of conversions");
+      unsigned long currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time1;
+      time1 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#1:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time1);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time2;
+      time2 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#2:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time2);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time3;
+      time3 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#3:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time3);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time4;
+      time4 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#4:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time4);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time5;
+      time5 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#5:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time5);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time6;
+      time6 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#6:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time6);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time7;
+      time7 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#7:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time7);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time8;
+      time8 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#8:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time8);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time9;
+      time9 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#9:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time9);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time10;
+      time10 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#10:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time10);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time11;
+      time11 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#11:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time11);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time12;
+      time12 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#12:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time12);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time13;
+      time13 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#13:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time13);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time14;
+      time14 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#14:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time14);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time15;
+      time15 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#15:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time15);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time16;
+      time16 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#16:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time16);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time17;
+      time17 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#17:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time17);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time18;
+      time18 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#18:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time18);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time19;
+      time19 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#19:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time19);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time20;
+      time20 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#20:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time20);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time21;
+      time21 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#21:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time21);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time22;
+      time22 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#22:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time22);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time23;
+      time23 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#23:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time23);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time24;
+      time24 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#24:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time24);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time25;
+      time25 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#25:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time25);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time26;
+      time26 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#26:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time26);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time27;
+      time27 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#27:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time27);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time28;
+      time28 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#28:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time28);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time29;
+      time29 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#29:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time29);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      currentMicros = micros();          /* set the current time */  
+      conversion_value = analogRead(Analog_Pin);      /* reading in analog value to convert to digital  */
+      previousMicros = micros();                 /* get current time        */
+      int time30;
+      time30 = (previousMicros - currentMicros);  /* fetching the time it took for analogRead to convert analog to digital */
+      Serial.print("#30:    digital value =  ");
+      Serial.print(conversion_value,HEX);
+      Serial.print("\t Time = ");
+      Serial.println(time30);
+      delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+
+      average_conversion_time = ((time1 + time2 + time3 + time4 + time5 + time6 + time7 + time8 + time9 + time10 + time11 + time12 + time13 + time14 + time15 + time16 + time17 + time18 + time19 + time20 + time21 + time22 + time23 + time24 + time25 + time26 + time27 + time28 + time29 + time30)/30);
+      Serial.print("avg conversion time = ");
+      Serial.print(average_conversion_time);
+      Serial.println("usecs");
+      Serial.println("Enter the letter 'c' to begin a set of 30 analog-to-digital conversions");
+    }
+    else{
+      Serial.println("Error: Incorrect Input");
+    }
+  }
+}
+
+
