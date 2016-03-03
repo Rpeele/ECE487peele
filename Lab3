@@ -2,6 +2,7 @@
 /* 11409684                                        */
 /* Laboratory 3 - Introduction to Watchdog Timers  */
 
+#include <avr/wdt.h>                  /* library for WDT */
 #define A 2                           /* pin allocations for seven-segment display */ 
 #define B 3
 #define C 4
@@ -11,14 +12,12 @@
 #define G 9                         /* pin allocations for seven-segment display */
 #define DP 10                        /* pin 10 allocated for decimal on display   */
 
-unsigned long previousMillis = 0;    /* setting variable at 0 to compare */
-int inputnumber = 0;
+int inputnumber;
 int displaynumber;
-int resetPin = 12;                  /* reset pin connected to output pin 12 */
 
 void setup() {
-  
-  digitalWrite(resetPin, HIGH);    /* reset pin enabled high so that the arduino doesn't automatically reset. (all pins are pulled low at power up) */ 
+
+  wdt_enable(WDTO_4S);             /* WDT enabled, will reset if no input for 4s */  
   pinMode(A, OUTPUT);              /* setting seven segment display as output  */
   pinMode(B, OUTPUT);
   pinMode(C, OUTPUT);
@@ -27,36 +26,36 @@ void setup() {
   pinMode(F, OUTPUT);
   pinMode(G, OUTPUT);             /* setting seven segment display as output  */
   pinMode(DP, OUTPUT);
-  pinMode(resetPin, OUTPUT); 
   Serial.begin(9600);             /* initialize serial library at 9600 bps  */
+  Serial.println("A Reset has just occured"); 
   Serial.println("Waiting for integer input from 0-16 (in decimal) from user: ");    
-    
+  digitalWrite(D, HIGH);      /* turns on the decimal point to indicate a reset has occured */
+  digitalWrite(E, HIGH);
+  digitalWrite(F, HIGH);
+  digitalWrite(G, HIGH);
+  digitalWrite(A, HIGH);
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  digitalWrite(DP, LOW);
+  
 
 }
 
 void loop() {
-  unsigned long currentMillis = millis();  /* set the current time */
-  if (currentMillis - previousMillis >= 3000){    /* if nothing is available in serial port and 3 seconds pass, reset arduino */
-    Serial.println("No input detected for 3 seconds, resetting arduino...  ");
-    displaynumber = 16;                                                         /* setting the display case to print to display                             */
-    previousMillis = currentMillis;                                             /* remember the time                                                        */  
-    digitalWrite(resetPin, LOW);                  /* resetting Arduino   */ 
-    DisplayCount();                                                             /* sending reset signal (dot) to Display                                    */
-  }
   if (Serial.available() > 0) {            /* checks if there are any available bytes for reading in the serial port */
+    wdt_reset();                          /* resets timer */
     int inputnumber = Serial.parseInt();      /* read incoming integer number       */
     if(inputnumber >= 16) {
-      displaynumber = 17;                  /* if input is greater or equal to 16, then */
+      displaynumber = 16;                  /* if input is greater or equal to 16, then */
       DisplayCount();                     /* sending invalid input ( 3 horizontal lines) to Display  */
       Serial.println(" Invalid Input, type numbers between 1-15 only ");
-      previousMillis = currentMillis;     /* remember the time */
       }
     if(inputnumber < 16) {
       displaynumber = inputnumber;
       DisplayCount();                     /* sending input to 7 Segment Display    */
+      digitalWrite(DP,HIGH);              /* turning off the decimal point */
       Serial.print("Valid Data Received : ");     /* sending input data to Serial monitor  */
       Serial.println(inputnumber);      
-      previousMillis = currentMillis;     /* remember the time */
     }
       
   }
@@ -225,17 +224,7 @@ void DisplayCount()  {           /* function to display the count to the 7-segme
       digitalWrite(C, HIGH);
       digitalWrite(DP, HIGH);
       break;  
-     case 16:               /* case for decimal point  */
-      digitalWrite(D, HIGH);
-      digitalWrite(E, HIGH);
-      digitalWrite(F, HIGH);
-      digitalWrite(G, HIGH);
-      digitalWrite(A, HIGH);
-      digitalWrite(B, HIGH);
-      digitalWrite(C, HIGH);
-      digitalWrite(DP, LOW);
-      break;
-     case 17:               /* case for invalid input --> 3 horizontal lines  */
+     case 16:              /* case for invalid input --> 3 horizontal lines  */
       digitalWrite(D, LOW);
       digitalWrite(E, HIGH);
       digitalWrite(F, HIGH);
