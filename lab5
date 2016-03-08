@@ -1,0 +1,68 @@
+/* Robby Peele                                                 */
+/* 11409684                                                    */
+/* Laboratory 5 - Introduction to Polling Applications and Direct Port Manipulation */
+
+
+void setup() {
+  Serial.begin(9600);       /* initialize serial library at 9600 bps  */
+  Serial.print("Select a type of conversion to perform: press 'a' for AnalogRead; 'b' for Direct Port Manipulation");
+
+}
+
+void loop() {
+  if(Serial.available() > 0) {             /* fetch the number of characters available for reading in the serial buffer  */
+    String inputletter = Serial.readString();       /* read incoming byte */ 
+    if(inputletter == "a") {
+      conversions();          /* start conversion using Analog read */
+      Serial.println("Select a type of conversion to perform: press 'a' for AnalogRead; 'b' for Direct Port Manipulation");
+    }
+    if(inputletter == "b") {
+      conversion_Ports();
+      Serial.println("Select a type of conversion to perform: press 'a' for AnalogRead; 'b' for Direct Port Manipulation");   
+    }
+    else{
+      Serial.println("Error: Incorrect Input");   
+    }
+  }
+}
+
+void conversions(){
+  int counter = 1;                /* Initializing variables used in this function */ 
+  int Summation = 0;
+  int a = 0;
+  int conversion_value;           /* Initializing variables used in this function */ 
+  unsigned long previousMicros=0;
+  int ArrayVal[30];               /* Initializing array used to store conversion times */ 
+  while(a<30){
+    unsigned long currentMicros = micros();         /* set the current time */  
+    conversion_value = analogRead(A0);      /* reading in analog value to convert to digital  */
+    previousMicros = micros();                      /* get current time        */ 
+    int conversionTime;
+    conversionTime = previousMicros - currentMicros;   /* getting conversion time */
+    ArrayVal[a] = conversionTime;
+    Serial.print("#");
+    Serial.print(counter);
+    Serial.print(":    digital value =  ");
+    Serial.print(conversion_value,HEX);
+    Serial.print("\t Time = ");
+    Serial.println(conversionTime);
+    delay(500);                                     /* waits 0.5 seconds until next conversion starts */
+    counter++;                          /* incremenet counter */
+    a++;                                /* increment a */
+  }
+  int x = 0;
+  while(x<30){
+    
+    Summation += ArrayVal[x];           /* summing values */
+    x++;
+  }
+  int average_time;
+  average_time = Summation/30;                /* getting average value of conversion times */
+  Serial.print("avg conversion time = ");
+  Serial.print(average_time);
+  Serial.println("usecs");
+}
+
+void conversion_Ports(){
+    
+}
