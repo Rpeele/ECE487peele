@@ -6,8 +6,8 @@
 void setup() {
   Serial.begin(9600);       /* initialize serial library at 9600 bps  */
   Serial.println("Select a type of conversion to perform: press 'a' for AnalogRead; 'b' for Direct Port Manipulation");
-  ADMUX = 0x43;               /* sets refereance voltage to 5v, and ouput to pin 3 */
-  ADCSRB = 0x00;
+  ADMUX = 0x40;               /* sets refereance voltage to 5v, and ouput to pin A0*/
+  ADCSRB = 0x00;             /* setting the ADCSRB to all 0's */
 
 }
 
@@ -18,7 +18,7 @@ void loop() {
       conversions();          /* start conversion using Analog read */
       Serial.println("Select a type of conversion to perform: press 'a' for AnalogRead; 'b' for Direct Port Manipulation");
     }
-    if(inputletter == "b") {
+    else if(inputletter == "b") {
       conversion_Ports();
       Serial.println("Select a type of conversion to perform: press 'a' for AnalogRead; 'b' for Direct Port Manipulation");   
     }
@@ -29,6 +29,7 @@ void loop() {
 }
 
 void conversions(){
+  Serial.println("Starting a set of conversions using AnalogRead: ");
   int counter = 1;                /* Initializing variables used in this function */ 
   int Summation = 0;
   int a = 0;
@@ -41,7 +42,7 @@ void conversions(){
     previousMicros = micros();                      /* get current time        */ 
     int conversionTime;
     conversionTime = previousMicros - currentMicros;   /* getting conversion time */
-    ArrayVal[a] = conversionTime;
+    ArrayVal[a] = conversionTime;                     /* putting the conversion times into an array */
     Serial.print("#");
     Serial.print(counter);
     Serial.print(":    digital value =  ");
@@ -60,12 +61,15 @@ void conversions(){
   }
   int average_time;
   average_time = Summation/30;                /* getting average value of conversion times */
+  Serial.println(" ");
   Serial.print("avg conversion time = ");
   Serial.print(average_time);
-  Serial.println("usecs");
+  Serial.println(" usecs");
+  Serial.println(" ");
 }
 
 void conversion_Ports(){
+  Serial.println("Starting a set of conversions using polling and port manipulation: ");
   int counter = 1;                /* Initializing variables used in this function */ 
   int Summation = 0;
   int a = 0;
@@ -74,15 +78,15 @@ void conversion_Ports(){
   int ArrayVal2[30];               /* Initializing array used to store conversion times */ 
   while(a<30){
     bitWrite(ADCSRA, 6, 1);          /* setting the 6th bit back to 1 to continue conversion, because after conversion it gets set to 0 */
-    unsigned long currentMicros = micros();         /* set the current time */  
-    while(ADCSRA & 0x40){
-    }
-    previousMicros = micros();                      /* get current time        */ 
+    unsigned long currentMicros = micros();      /* set the current time */  
+    while(ADCSRA & 0x40){                        /* comparing a mask so that it stays in the while loop until the conversion is finished */ 
+    }                                            /* waits until the 6th converion bit goes to zero (that means the conversion finished) */ 
+    previousMicros = micros();                   /* get current time        */ 
     conversion_value2 = ADCL;                /* stores lower byte of ADC   */
     conversion_value2 += ADCH << 8;         /* stores higher bytes of ADC */
     int conversionTime;
     conversionTime = previousMicros - currentMicros;   /* getting conversion time */
-    ArrayVal2[a] = conversionTime;
+    ArrayVal2[a] = conversionTime;                    /* storing conversion times into an array */
     Serial.print("#");
     Serial.print(counter);
     Serial.print(":    digital value =  ");
@@ -101,7 +105,9 @@ void conversion_Ports(){
   }
   int average_time;
   average_time = Summation/30;                /* getting average value of conversion times */
+  Serial.println(" ");
   Serial.print("avg conversion time = ");
   Serial.print(average_time);
-  Serial.println("usecs");
+  Serial.println(" usecs");
+  Serial.println(" ");
 }
