@@ -3,9 +3,12 @@
 /* Laboratory 6 - Introduction to Interrupt-Driven Applications */
 
 
-int flag = 0;  /*initializing interupt flag */
+volatile int flag = 0;  /*initializing interupt flag */
 unsigned long previousMicros=0;
 int conversion_value2;           /* Initializing variables used in this function */
+int average_time;
+int average_time1;
+int average_time2;
 
 void setup() {
   Serial.begin(9600);       /* initialize serial library at 9600 bps  */
@@ -68,11 +71,21 @@ void conversions(){
     Summation += ArrayVal[x];           /* summing values */
     x++;
   }
-  int average_time;
   average_time = Summation/30;                /* getting average value of conversion times */
   Serial.println(" ");
-  Serial.print("avg conversion time = ");
+  Serial.print("AnalogRead avg conversion time = ");
   Serial.print(average_time);
+  Serial.println(" usecs");
+  Serial.println(" ");
+  Serial.println("TOTALS:");
+  Serial.print("AnalogRead avg conversion time = ");
+  Serial.print(average_time);
+  Serial.println(" usecs");
+  Serial.print("Polling avg conversion time = ");
+  Serial.print(average_time1);
+  Serial.println(" usecs");
+  Serial.print("Interrupt-driven avg conversion time = ");
+  Serial.print(average_time2);
   Serial.println(" usecs");
   Serial.println(" ");
 }
@@ -108,21 +121,31 @@ void conversion_Ports(){
   }
   int x = 0;
   while(x<30){
-    
     Summation += ArrayVal2[x];           /* summing values */
     x++;
   }
-  int average_time;
-  average_time = Summation/30;                /* getting average value of conversion times */
+  average_time1 = Summation/30;                /* getting average value of conversion times */
   Serial.println(" ");
-  Serial.print("avg conversion time = ");
+  Serial.print("Polling avg conversion time = ");
+  Serial.print(average_time1);
+  Serial.println(" usecs");
+  Serial.println(" ");
+  Serial.println("TOTALS:");
+  Serial.print("AnalogRead avg conversion time = ");
   Serial.print(average_time);
+  Serial.println(" usecs");
+  Serial.print("Polling avg conversion time = ");
+  Serial.print(average_time1);
+  Serial.println(" usecs");
+  Serial.print("Interrupt-driven avg conversion time = ");
+  Serial.print(average_time2);
   Serial.println(" usecs");
   Serial.println(" ");
 }
 
 void conversion_Interrupt(){
-  Serial.println("Starting a set of conversions using polling and port manipulation: ");
+  ADCSRA |= 0x08;    /* bit 3 */
+  Serial.println("Starting a set of conversions using Interrupts: ");
   int counter = 1;                /* Initializing variables used in this function */ 
   int Summation = 0;
   int a = 0;
@@ -132,8 +155,10 @@ void conversion_Interrupt(){
     bitWrite(ADCSRA, 6, 1);          /* setting the 6th bit back to 1 to start conversion, because after conversion it gets set to 0 */
     unsigned long currentMicros = micros();      /* set the current time */  
     while(flag == 0){                         /* foreground application */ 
-      flag = 0; 
+      //flag = 0; 
     }      
+    flag = 0;
+    conversion_value2 = ADC;
     int conversionTime;
     conversionTime = previousMicros - currentMicros;   /* getting conversion time */
     ArrayVal2[a] = conversionTime;                    /* storing conversion times into an array */
@@ -149,25 +174,30 @@ void conversion_Interrupt(){
   }
   int x = 0;
   while(x<30){
-    
     Summation += ArrayVal2[x];           /* summing values */
     x++;
   }
-  int average_time;
-  average_time = Summation/30;                /* getting average value of conversion times */
+  average_time2 = Summation/30;                /* getting average value of conversion times */
   Serial.println(" ");
-  Serial.print("avg conversion time = ");
-  Serial.print(average_time);
+  Serial.print("Interrupt-driven avg conversion time = ");
+  Serial.print(average_time2);
   Serial.println(" usecs");
   Serial.println(" ");
+  Serial.println("TOTALS:");
+  Serial.print("AnalogRead avg conversion time = ");
+  Serial.print(average_time);
+  Serial.println(" usecs");
+  Serial.print("Polling avg conversion time = ");
+  Serial.print(average_time1);
+  Serial.println(" usecs");
+  Serial.print("Interrupt-driven avg conversion time = ");
+  Serial.print(average_time2);
+  Serial.println(" usecs");
+  Serial.println(" ");
+  ADCSRA &= 0xF7;
 }
 
 ISR(ADC_vect) {
   previousMicros = micros();                   /* get current time        */ 
-  conversion_value2 = ADCL;                /* stores lower byte of ADC   */
-  conversion_value2 += ADCH << 8;         /* stores higher bytes of ADC */
   flag = 1;
 }
-
-
-
