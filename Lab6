@@ -5,7 +5,6 @@
 
 volatile int flag = 0;  /*initializing interupt flag */
 unsigned long previousMicros=0;
-int conversion_value2;           /* Initializing variables used in this function */
 int average_time;
 int average_time1;
 int average_time2;
@@ -144,21 +143,23 @@ void conversion_Ports(){
 }
 
 void conversion_Interrupt(){
-  ADCSRA |= 0x08;    /* bit 3 */
+  ADCSRA |= 0x08;    /* enable interrupt */
   Serial.println("Starting a set of conversions using Interrupts: ");
   int counter = 1;                /* Initializing variables used in this function */ 
   int Summation = 0;
   int a = 0;
   int conversion_value2;           /* Initializing variables used in this function */ 
-  int ArrayVal2[30];               /* Initializing array used to store conversion times */ 
+  int ArrayVal2[30];               /* Initializing array used to store conversion times */
+  int RandomMath; 
   while(a<30){
     bitWrite(ADCSRA, 6, 1);          /* setting the 6th bit back to 1 to start conversion, because after conversion it gets set to 0 */
     unsigned long currentMicros = micros();      /* set the current time */  
     while(flag == 0){                         /* foreground application */ 
-      //flag = 0; 
+      RandomMath = 5 + 6;
+      RandomMath = 5 / 7;  
     }      
-    flag = 0;
-    conversion_value2 = ADC;
+    flag = 0;                             /* set flag back to 0 for next conversion cycle */
+    conversion_value2 = ADC;              /* Read the ADC value */
     int conversionTime;
     conversionTime = previousMicros - currentMicros;   /* getting conversion time */
     ArrayVal2[a] = conversionTime;                    /* storing conversion times into an array */
